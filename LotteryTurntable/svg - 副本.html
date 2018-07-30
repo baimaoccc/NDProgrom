@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <style>
+        .bg {
+            background-color: #2E78B2;
+        }
+        .htmleaf-content{
+            transform: rotate(60deg);
+        }
+    </style>
+    <script>
+        // 创建path
+        function getSvgSectorPoint(cx, cy, r, startAngle, endAngle) {
+            var rad = Math.PI / 180;
+            var x1 = cx + r * Math.cos(-startAngle * rad),        //起始X点
+                y1 = cy + r * Math.sin(-startAngle * rad),        //起始Y点
+                x2 = cx + r * Math.cos(-endAngle * rad),        //结束X点
+                y2 = cy + r * Math.sin(-endAngle * rad);        //结束Y点
+            var ar = [];
+            ar.push('M');
+            ar.push(cx);
+            ar.push(cy);
+            ar.push("L");
+            ar.push(x1);
+            ar.push(y1);
+            ar.push("A");
+            ar.push(r);
+            ar.push(r);
+            ar.push(0);
+            ar.push(+(endAngle - startAngle > 180));
+            ar.push(0);
+            ar.push(x2);
+            ar.push(y2);
+            ar.push('z');
+            return ar.join(' ');
+        }
+
+    </script>
+</head>
+
+<body class="bg">
+    <div class="htmleaf-content">
+        <svg width="900" height="900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 900"
+            id="menu" style="pointer-events: auto">
+            <style>
+                #menu {
+                    display: block;
+                    margin: 0 auto;
+                    overflow: visible;
+                }
+
+                .item .sector {
+                    transition: all .1s linear;
+
+                    stroke: #fff;
+                    stroke-width: 1;
+                }
+
+                .item:hover .sector {
+                    fill: #9A2764;
+                }
+
+                .menu-trigger {
+                    fill: #360036;
+                    pointer-events: auto;
+                    stroke: #fff;
+                    stroke-width: 2;
+                }
+
+                .menu-trigger:hover {
+                    cursor: pointer;
+                }
+
+                use {
+                    fill: #360036;
+                }
+
+                .item:hover use {
+                    fill: #fff;
+                }
+            </style>
+            <g id="itemsContainer" transform="" style="opacity: 1;">
+            </g>
+            <g id="centercircle" class="trigger menu-trigger">
+            </g>
+            <script type="text/javascript">
+
+                function createSvgG(index, transform, cx, cy, r, startAngle, endAngle, fillColor) {
+                    var a = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    a.setAttribute('class', 'item');
+                    a.setAttribute('transform', transform);
+                    var path = createSvgPath(cx, cy, r, startAngle, endAngle, fillColor);
+                    a.appendChild(path);
+                    var tcx = (2 * cx + r * Math.cos(-endAngle * (Math.PI / 180))) / 1.9;
+                    var tcy = (2 * cy + r * Math.sin(-endAngle * (Math.PI / 180))) / (1.8);
+                    var text = createText('text_' + index, tcx, tcy, transform);
+                    a.appendChild(text);
+                    return a;
+                }
+                function createSvgPath(cx, cy, r, startAngle, endAngle, styleLinear) {
+                    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('style', styleLinear);
+                    path.setAttribute('class', 'sector');
+                    path.setAttribute('d', getSvgSectorPoint(cx, cy, r, startAngle, endAngle));
+                    return path;
+                }
+                function createText(textContent, x, y, transform) {
+                    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', x);
+                    text.setAttribute('y', y);
+                    text.setAttribute('transform', transform);
+                    text.textContent = textContent
+                    return text;
+                }
+                function createLinearGradient(id, fillColor) {
+                    var linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                    linearGradient.setAttribute('id', id);
+                    linearGradient.setAttribute('x1', '0%');
+                    linearGradient.setAttribute('y1', '0%');
+                    linearGradient.setAttribute('x2', '100%');
+                    linearGradient.setAttribute('y2', '0%');
+                    var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
+                    var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
+                    linearGradient.appendChild(stop1);
+                    linearGradient.appendChild(stop2);
+                    return linearGradient;
+
+                }
+                function randomColor() {
+                    var r = Math.floor(Math.random() * 256);
+                    var g = Math.floor(Math.random() * 256);
+                    var b = Math.floor(Math.random() * 256);
+                    return "rgb(" + r + ',' + g + ',' + b + ")";
+                }
+                function create(count) {
+                    var cx = 500;
+                    var cy = 500;
+                    var r = 460;
+                    var angle = 360 / count;
+                    var sAngle = angle;
+                    for (var i = 0; i < count; i++) {
+                        var fillColor = '#3600' + (2 * i);
+                        var linearId = 'linear' + i;
+                        var styleLinear = 'fill:url(#' + linearId + ')';
+                        var transform = 'rotate(' + sAngle + ' ' + cx + ' ' + cy + ')';
+                        sAngle = sAngle + angle;
+                        document.getElementById('menu').appendChild(createLinearGradient(linearId, fillColor));
+                        var a = createSvgG(i, transform, cx, cy, r, 0, angle, styleLinear);
+                        document.getElementById('itemsContainer').appendChild(a);
+                    }
+                    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', cx);
+                    circle.setAttribute('cy', cy);
+                    circle.setAttribute('r', 6);
+                    document.getElementById('centercircle').appendChild(circle);
+                }
+                create(10);
+            </script>
+        </svg>
+    </div>
+</body>
+
+</html>
