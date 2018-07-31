@@ -3,21 +3,227 @@
 
 <head>
     <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         .bg {
             background-color: #2E78B2;
         }
-        .htmleaf-content{
+
+        /* .htmleaf-content {
             transform: rotate(60deg);
+        } */
+    </style>
+
+    <style>
+        #menu {
+            display: block;
+            margin: 0 auto;
+            overflow: visible;
+            border-radius: 50%;
+            /* border: 1px solid red; */
+            /* box-shadow: 0 0 10px #000000 inset; */
+        }
+
+        .item .sector {
+            transition: all .1s linear;
+            stroke: #fff;
+            stroke-width: 5;
+
+        }
+
+        .item:hover .sector {
+            fill: #9A2764;
+        }
+
+        .inner_text {
+            font-size: 40px;
+            fill: #000000;
+        }
+
+        .white_text {
+            font-size: 40px;
+            fill: white;
+        }
+
+
+        .menu-trigger {
+            fill: #360036;
+            pointer-events: auto;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .menu-trigger:hover {
+            cursor: pointer;
+        }
+
+        use {
+            fill: #360036;
+        }
+
+        .item:hover use {
+            fill: #fff;
+        }
+
+
+        .functional_areas {
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .drop_down_menu {
+            text-align: center;
+            border: 1px solid green;
+        }
+
+        .drop_down_menu .text {
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .drop_down_menu .arrows {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            vertical-align: middle;
+        }
+
+        .button_areas {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 200px;
+            height: 80px;
+            margin: 0 auto;
+            border: 1px solid rebeccapurple;
+        }
+
+        .button_areas .functional_button {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            border-radius: 50%;
+        }
+
+
+        .function_picker {
+            display: none;
+            position: absolute;
+            left: 50%;
+            bottom: 80px;
+            margin-left: -150px;
+            width: 300px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 20px #999999;
+        }
+
+        .function_picker ul {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        li {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            font-size: 16px;
+        }
+
+        li:not(:last-child) {
+            position: relative;
+            border-bottom: 1px solid #c9c6c6;
+        }
+
+        li span:nth-child(1) {
+            margin-left: 10px;
+        }
+
+        li span:nth-child(2) {
+            display: inline-block;
+            float: right;
+            width: 20px;
+            height: 20px;
+            border: 1px solid red;
+            margin-right: 10px;
+            margin-top: 15px;
         }
     </style>
     <script src="./jquery.js"></script>
-    <script>
+</head>
+
+<body class="bg">
+    <div class="htmleaf-content">
+
+        <svg width="600" height="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 900"
+            id="menu" style="pointer-events: auto">
+            <g id="itemsContainer" style="opacity: 1;">
+            </g>
+            <g id="centercircle" class="trigger menu-trigger">
+            </g>
+        </svg>
+
+        <div class="functional_areas">
+            <div class="drop_down_menu">
+                <span class="text">COLORS</span>
+                <span class="arrows"></span>
+            </div>
+            <div class="function_picker">
+                <ul>
+                    <!-- <li>
+                        <span>CREATE NEW</span>
+                        <span class="icon"></span>
+                    </li> -->
+                    <!-- <li>
+                        <span>COLORS</span>
+                        <span class="icon"></span>
+                    </li>
+                    <li>
+                        <span>NAMES</span>
+                        <span class="icon"></span>
+                    </li>
+                    <li>
+                        <span>ALPHABET</span>
+                        <span class="icon"></span>
+                    </li>
+                    <li>
+                        <span>VOWELS</span>
+                        <span class="icon"></span>
+                    </li>
+                    <li>
+                        <span>CONSONANTS</span>
+                        <span class="icon"></span>
+                    </li>
+                    <li>
+                        <span>NUMBERS 1-10</span>
+                        <span class="icon"></span>
+                    </li> -->
+                </ul>
+
+            </div>
+            <div class="button_areas">
+                <span class="functional_button"></span>
+                <span class="functional_button"></span>
+                <span class="functional_button"></span>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <script type="text/javascript">
         // 创建path
         function getSvgSectorPoint(cx, cy, r, startAngle, endAngle) {
-            // console.log(arguments);
-            
             var rad = Math.PI / 180;
-            // console.log(-startAngle * rad)
 
             // 顺时针旋转取负值
             var x1 = cx + r * Math.cos(-startAngle * rad),        //起始X点
@@ -40,169 +246,145 @@
             // large-arc-flag 是标记绘制大弧(1)还是小弧(0)部分。
             // sweep-flag 是标记向顺时针(1)还是逆时针(0)方向绘制。
             // x y 是圆弧终点的坐标。
+
             ar.push(r);
             ar.push(r);
             ar.push(0);
             ar.push(+(endAngle - startAngle > 180));    // 0表示小圆弧，1表示大圆弧
-            // ar.push(1);
             ar.push(0);     //逆时针方向绘制
             ar.push(x2);
             ar.push(y2);
             ar.push('z');   // 最后封闭路径
-            console.group('路径数组----');
-            console.log(ar);
-            console.groupEnd('路径数组----');
             return ar.join(' ');
         }
 
-    </script>
-</head>
+        function createSvgG(textContent, index, transform, cx, cy, r, startAngle, endAngle, fillColor) {
+            // 创建g元素是一个组，每个组就是每块扇形，通过g元素的transform属性使得扇形顺时针旋转下去
+            var a = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            a.setAttribute('class', 'item');
+            a.setAttribute('transform', transform);     // 顺时针旋转扇形
+            var path = createSvgPath(cx, cy, r, startAngle, endAngle, fillColor);
+            a.appendChild(path);
 
-<body class="bg">
-    <div class="htmleaf-content">
-        <svg width="900" height="900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 900"
-            id="menu" style="pointer-events: auto">
-            <style>
-                #menu {
-                    display: block;
-                    margin: 0 auto;
-                    overflow: visible;
-                }
+            var text = createText(fillColor.split('#')[1], textContent, startAngle, endAngle, r, cx, cy);
+            a.appendChild(text);
+            return a;
+        }
+        function createSvgPath(cx, cy, r, startAngle, endAngle, styleLinear) {
 
-                .item .sector {
-                    transition: all .1s linear;
-                    stroke: #fff;
-                    stroke-width: 1;
-                }
+            var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('style', styleLinear);    // 定义path内的渐变颜色规则
+            path.setAttribute('class', 'sector');
+            path.setAttribute('d', getSvgSectorPoint(cx, cy, r, startAngle, endAngle));
+            return path;
+        }
 
-                .item:hover .sector {
-                    fill: #9A2764;
-                }
+        function createText(hexColor, textContent, startAngle, endAngle, radius, cx, cy) {
+            var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 
-                .inner_text {
-                    font-size: 20px;
-                }
+            var midAngle = (endAngle - startAngle) / 2;
+            var textX = cx + (0.5 * radius - 10) * Math.cos(-midAngle * (Math.PI / 180));
+            var textY = cy + (0.5 * radius - 10) * Math.sin(-midAngle * (Math.PI / 180));
+            text.setAttribute('x', textX);
+            text.setAttribute('y', textY);
 
-                
-                .menu-trigger {
-                    fill: #360036;
-                    pointer-events: auto;
-                    stroke: #fff;
-                    stroke-width: 2;
-                }
+            // 求中心点设置text的transform的旋转的中心为中心点
+            var midX = cx + (0.5 * radius) * Math.cos(-midAngle * (Math.PI / 180));
+            var midY = cx + (0.5 * radius) * Math.sin(-midAngle * (Math.PI / 180));
 
-                .menu-trigger:hover {
-                    cursor: pointer;
-                }
+            // 将fillColor传进来用于判断底色的深浅后修改字体颜色
 
-                use {
-                    fill: #360036;
-                }
+            var r = parseInt(hexColor.substring(0, 2), 16);
+            var g = parseInt(hexColor.substring(2, 4), 16);
+            var b = parseInt(hexColor.substring(4, 6), 16);
+            if (r * 0.299 + g * 0.578 + b * 0.114 >= 192) { //浅色
+                text.setAttribute('class', 'inner_text');
+            } else {  //深色
+                text.setAttribute('class', 'white_text');
+            }
 
-                .item:hover use {
-                    fill: #fff;
-                }
-            </style>
-            <g id="itemsContainer" transform="" style="opacity: 1;">
-            </g>
-            <g id="centercircle" class="trigger menu-trigger">
-            </g>
-            <script type="text/javascript">
+            text.setAttribute('transform', 'rotate(' + (-midAngle) + ' ' + midX + ' ' + midY + ')');
+            text.textContent = textContent
+            return text;
+        }
 
-                function createSvgG(index, transform, cx, cy, r, startAngle, endAngle, fillColor) {
-                    // 创建g元素是一个组，每个组就是每块扇形，通过g元素的transform属性使得扇形顺时针旋转下去
-                    var a = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                    a.setAttribute('class', 'item');
-                    a.setAttribute('transform', transform);     // 顺时针旋转扇形
-                    var path = createSvgPath(cx, cy, r, startAngle, endAngle, fillColor);
-                    a.appendChild(path);
+        // function createLinearGradient(id, fillColor) {
+        //     console.log(fillColor);
 
-                    var text = createText('text_' + index, startAngle, endAngle, r, cx, cy);
-                    a.appendChild(text);    
-                    return a;
-                }
-                function createSvgPath(cx, cy, r, startAngle, endAngle, styleLinear) {
-                    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    path.setAttribute('style', styleLinear);    // 定义path内的渐变颜色规则
-                    path.setAttribute('class', 'sector');
-                    path.setAttribute('d', getSvgSectorPoint(cx, cy, r, startAngle, endAngle));
-                    return path;
-                }
-                function createText(textContent, startAngle, endAngle, r, cx, cy) {
-                    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    text.setAttribute('class', 'inner_text');
-                   
+        //     // createElementNS的第一个参数ns_string 可以指定命名空间，如下传入 http://www.w3.org/2000/svg 说明linearGradient元素存在于xml值为
+        //     // http://www.w3.org/2000/svg的命名空间中，自我理解应该是为了防止svg中创建了同名的元素，指定元素作用的命名空间防止引起冲突。
 
-                    
-                    var midAngle = (endAngle - startAngle) / 2;
-                    var textX = cx + (0.5 * r - 10) * Math.cos(-midAngle * (Math.PI / 180));
-                    var textY = cy + (0.5 * r - 10) * Math.sin(-midAngle * (Math.PI / 180));
-                    text.setAttribute('x',textX);
-                    text.setAttribute('y',textY);
+        //     var linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        //     // svg中创建线性渐变的方法，外层使用linearGradient元素包裹，通过（x1,y1）（x2,y2）指定线性渐变的方向。
 
-                    // 求中心点设置text的transform的旋转的中心为中心点
-                    var midX = cx + (0.5 * r) * Math.cos(-midAngle * (Math.PI / 180));
-                    var midY = cx + (0.5 * r) * Math.sin(-midAngle * (Math.PI / 180));
+        //     linearGradient.setAttribute('id', id);
+        //     linearGradient.setAttribute('x1', '0%');
+        //     linearGradient.setAttribute('y1', '0%');
+        //     linearGradient.setAttribute('x2', '100%');
+        //     linearGradient.setAttribute('y2', '0%');
 
-                    text.setAttribute('transform', 'rotate(' + -midAngle + ' ' + midX + ' ' + midY + ')');
-                    text.textContent = textContent
-                    return text;
-                }
-                function createLinearGradient(id, fillColor) {
-                    // createElementNS的第一个参数ns_string 可以指定命名空间，如下传入 http://www.w3.org/2000/svg 说明linearGradient元素存在于xml值为
-                    // http://www.w3.org/2000/svg的命名空间中，自我理解应该是为了防止svg中创建了同名的元素，指定元素作用的命名空间防止引起冲突。
+        //     // 创建两个stop元素通过用来规定线性渐变初始和结束的颜色
+        //     // 径向渐变的起点是offset属性值最小的stop元素的stop-color属性值
+        //     // 径向渐变的终点是offset属性值最大的stop元素的stop-color属性值
+        //     var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        //     stop1.setAttribute('offset', '0%');
+        //     stop1.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
+        //     // stop1.setAttribute('style', 'stop-color:' + lightenDarkenColor(fillColor, 0) + '; stop-opacity:1');
+        //     var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        //     stop2.setAttribute('offset', '100%');
+        //     stop2.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
+        //     // stop2.setAttribute('style', 'stop-color:' + lightenDarkenColor(fillColor, 10) + '; stop-opacity:1');
+        //     linearGradient.appendChild(stop1);
+        //     linearGradient.appendChild(stop2);
+        //     return linearGradient;
+        // }
 
-                    var linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-                    // svg中创建线性渐变的方法，外层使用linearGradient元素包裹，通过（x1,y1）（x2,y2）指定线性渐变的方向。
-                    
-                    linearGradient.setAttribute('id', id);
-                    linearGradient.setAttribute('x1', '0%');
-                    linearGradient.setAttribute('y1', '0%');
-                    linearGradient.setAttribute('x2', '100%');
-                    linearGradient.setAttribute('y2', '0%');
-
-                    // 创建两个stop元素通过用来规定线性渐变初始和结束的颜色
-                    // 径向渐变的起点是offset属性值最小的stop元素的stop-color属性值
-                    // 径向渐变的终点是offset属性值最大的stop元素的stop-color属性值
-                    var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop1.setAttribute('offset', '0%');
-                    stop1.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
-                    var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                    stop2.setAttribute('offset', '100%');
-                    stop2.setAttribute('style', 'stop-color:' + randomColor() + '; stop-opacity:1');
-                    linearGradient.appendChild(stop1);
-                    linearGradient.appendChild(stop2);
-                    return linearGradient;
-
-                }
-                function randomColor() {
-                    var r = Math.floor(Math.random() * 256);
-                    var g = Math.floor(Math.random() * 256);
-                    var b = Math.floor(Math.random() * 256);
-                    return "rgb(" + r + ',' + g + ',' + b + ")";
-                }
+        // 颜色加深或变浅的方法
+        // function lightenDarkenColor(col, amt) {
+        //     var num = parseInt(col, 16);
+        //     var r = (num >> 16) + amt;
+        //     var b = ((num >> 8) & 0x00FF) + amt;
+        //     var g = (num & 0x0000FF) + amt;
+        //     var newColor = g | (b << 8) | (r < 16);
+        //     console.log(newColor.toString(16));
+        //     return newColor.toString(16);
+        // }
 
 
-                // 1. 根据传入数组的数量，设置
-                
-                function create(count) {
-                    // $.ajax("./data.json")
-                    var cx = 500;
-                    var cy = 500;
-                    var r = 460;
-                    var angle = 360 / count;
-                    var sAngle = angle;
-                    for (var i = 0; i < count; i++) {
-                        var fillColor = '#3600' + (2 * i);
+        // function randomColor() {
+        //     var r = Math.floor(Math.random() * 256);
+        //     var g = Math.floor(Math.random() * 256);
+        //     var b = Math.floor(Math.random() * 256);
+        //     return "rgb(" + r + ',' + g + ',' + b + ")";
+        // }
+
+
+        // 1. 根据传入数组的数量，设置
+
+        function create() {
+            $.ajax({
+                type: 'get',
+                url: './data.json',
+                dataType: 'json',
+                success: function (resourceData) {
+                    var cx = resourceData.circleX;
+                    var cy = resourceData.circleX;
+                    var r = resourceData.radius;
+
+                    var spinnerData = resourceData.turnplateArr[0].data;
+                    var angle = 360 / spinnerData.length;
+                    var sAngle = 1.5 * angle;
+                    for (var i = 0; i < spinnerData.length; i++) {
+                        /*原来是随机颜色现在使用定义的颜色**/
+                        var fillColor = spinnerData[i].color;
                         var linearId = 'linear' + i;
-                        var styleLinear = 'fill:url(#' + linearId + ')';
+                        var styleLinear = 'fill:' + fillColor;
                         var transform = 'rotate(' + sAngle + ' ' + cx + ' ' + cy + ')';
-                        console.log(transform + '----');
                         sAngle = sAngle + angle;
 
                         // 传入id和颜色基色，返回一个linearGradient元素追加至svg元素中
-                        document.getElementById('menu').appendChild(createLinearGradient(linearId, fillColor));
-                        var a = createSvgG(i, transform, cx, cy, r, 0, angle, styleLinear);
+                        // document.getElementById('menu').appendChild(createLinearGradient(linearId, fillColor));
+                        var a = createSvgG(spinnerData[i].text, i, transform, cx, cy, r, 0, angle, styleLinear);
                         document.getElementById('itemsContainer').appendChild(a);
                     }
 
@@ -210,16 +392,67 @@
                     var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     circle.setAttribute('cx', cx);
                     circle.setAttribute('cy', cy);
-                    circle.setAttribute('r', 6);
+                    circle.setAttribute('r', resourceData.centerRadius);
+                    circle.setAttribute('fill', "#2E78B2");
+                    // circle.setAttribute('filter', "url(#p1)");
                     document.getElementById('centercircle').appendChild(circle);
                 }
-                create(10);
+            })
 
-                // svg绘制图形并填充渐变颜色的方法，先定义渐变元素 linearGradient并设置id，linearGradient中包含两个stop元素用来定义渐变开始和结束的颜色
-                // 定义了渐变的规则元素linearGredient之后，使用path绘制特殊图形，并设置fill属性为想要使用的渐变规则元素linearGradient的元素id
-            </script>
-        </svg>
-    </div>
+        }
+        create();
+
+        // svg绘制图形并填充渐变颜色的方法，先定义渐变元素 linearGradient并设置id，linearGradient中包含两个stop元素用来定义渐变开始和结束的颜色
+        // 定义了渐变的规则元素linearGredient之后，使用path绘制特殊图形，并设置fill属性为想要使用的渐变规则元素linearGradient的元素id
+    </script>
+
+    <script>
+        // dom加载完成绑定监听
+        $(function () {
+            $('.drop_down_menu .text').on('click', function (event) {
+                event.stopPropagation();
+
+                $.ajax({
+                    type: 'get',
+                    url: './data.json',
+                    dataType: 'json',
+                    success: function (resourceData) {
+                        
+                        $('.function_picker ul').html('');
+                        $('.function_picker ul').append(
+                            `<li>
+                                <span>CREATE NEW</span>
+                                <span class="icon"></span>
+                            </li>`)
+                        console.log($('.function_pick ul'));
+                        for(var i = 0; i < resourceData.turnplateArr.length; i++) {
+                            $('.function_picker ul').append(
+                            `<li>
+                                <span>${resourceData.turnplateArr[i].title}</span>
+                                <span class="icon"></span>
+                            </li>`)
+                        }
+                        
+                        $('.function_picker').css({
+                            'display': 'block',
+                        });
+                    }
+                })
+
+            })
+
+            $('.htmleaf-content').on('click', function (e) {
+                if ($('.function_picker').css('display') == 'block') {
+                    $('.function_picker').css({
+                        'display': 'none',
+                    });
+                }
+            });
+
+
+
+        });
+    </script>
 </body>
 
 </html>

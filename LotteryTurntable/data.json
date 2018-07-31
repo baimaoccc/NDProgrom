@@ -1,27 +1,76 @@
 {
-    "data": [
+    "turnplateArr": [
         {
-            "color": "red",
-            "text": "哈哈"
+            "title": "COLORS",
+            "data": [
+                {
+                    "color": "#FF0000",
+                    "text": "Red"
+                },
+                {
+                    "color": "#FFFF00",
+                    "text": "嘻嘻"
+                },
+                {
+                    "color": "#A4D3EE",
+                    "text": "哦哦"
+                },
+                {
+                    "color": "#000000",
+                    "text": "黑色的"
+                },
+                {
+                    "color": "#ffffff",
+                    "text": "白色的"
+                },
+                {
+                    "color": "#9ACD32",
+                    "text": "绿色的"
+                }
+            ]
         },
         {
-            "color": "yellow",
-            "text": "嘻嘻"
+            "title": "NAMES",
+            "data": [
+                {
+                    "color": "#FF0000",
+                    "text": "白猫"
+                },
+                {
+                    "color": "#A4D3EE",
+                    "text": "小黄"
+                },
+                {
+                    "color": "#000000",
+                    "text": "黑猫"
+                }
+            ]
         },
         {
-            "color": "blue",
-            "text": "哦哦"
+            "title":"ALPHABET",
+            "data":[
+                
+            ]
         },
         {
-            "color": "black",
-            "text": "黑色的"
+            "title":"VOWELS",
+            "data":[
+
+            ]
         },
         {
-            "color": "white",
-            "text": "白色的"
+            "title":"CONSONANTS",
+            "data":[
+                
+            ]
+        },
+        {
+            "title":"NUMBER 1-10",
+            "data":[]
         }
     ],
-    "circleX": 550,
-    "circleY": 550,
-    "radius": 200
+    "centerRadius": 10,
+    "circleX": 450,
+    "circleY": 450,
+    "radius": 440
 }
