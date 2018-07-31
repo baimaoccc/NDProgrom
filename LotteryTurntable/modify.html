@@ -10,6 +10,7 @@
             transform: rotate(60deg);
         }
     </style>
+    <script src="./jquery.js"></script>
     <script>
         // 创建path
         function getSvgSectorPoint(cx, cy, r, startAngle, endAngle) {
@@ -182,7 +183,10 @@
                 }
 
 
+                // 1. 根据传入数组的数量，设置
+                
                 function create(count) {
+                    // $.ajax("./data.json")
                     var cx = 500;
                     var cy = 500;
                     var r = 460;
