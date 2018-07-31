@@ -1,0 +1,27 @@
+{
+    "data": [
+        {
+            "color": "red",
+            "text": "哈哈"
+        },
+        {
+            "color": "yellow",
+            "text": "嘻嘻"
+        },
+        {
+            "color": "blue",
+            "text": "哦哦"
+        },
+        {
+            "color": "black",
+            "text": "黑色的"
+        },
+        {
+            "color": "white",
+            "text": "白色的"
+        }
+    ],
+    "circleX": 550,
+    "circleY": 550,
+    "radius": 200
+}
